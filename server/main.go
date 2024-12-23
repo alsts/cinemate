@@ -3,10 +3,11 @@ package main
 import (
 	"log"
 
-	"cinemate.alsts.net/config"
-	"cinemate.alsts.net/routes"
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
+
+	"cinemate.alsts.net/config"
+	"cinemate.alsts.net/routes"
 )
 
 func main() {
@@ -14,6 +15,14 @@ func main() {
 	if err := godotenv.Load(); err != nil {
 		log.Printf("Warning: .env file not found: %v", err)
 	}
+
+	// Run database migrations
+	if err := config.RunMigrations(); err != nil {
+		log.Fatalf("Failed to run migrations: %v", err)
+	}
+
+	// Initialize database connection
+	config.InitDB()
 
 	// Initialize Fiber
 	app := fiber.New()

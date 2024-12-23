@@ -4,15 +4,18 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"strconv"
 
+	"cinemate.alsts.net/config"
 	"cinemate.alsts.net/models"
 )
 
 // GetMovies returns all movies
 func GetMovies(c *fiber.Ctx) error {
-	// TODO: Replace with actual database query
-	movies := []models.Movie{
-		{ID: 1, Title: "The Shawshank Redemption"},
-		{ID: 2, Title: "The Godfather"},
+	var movies []models.Movie
+	result := config.DB.Find(&movies)
+	if result.Error != nil {
+		return c.Status(500).JSON(fiber.Map{
+			"error": "Failed to fetch movies",
+		})
 	}
 	return c.JSON(movies)
 }
@@ -26,10 +29,12 @@ func GetMovie(c *fiber.Ctx) error {
 		})
 	}
 
-	// TODO: Replace with actual database query
-	movie := models.Movie{
-		ID:    id,
-		Title: "Sample Movie",
+	var movie models.Movie
+	result := config.DB.First(&movie, id)
+	if result.Error != nil {
+		return c.Status(404).JSON(fiber.Map{
+			"error": "Movie not found",
+		})
 	}
 
 	return c.JSON(movie)
