@@ -6,5 +6,10 @@ import (
 
 // RegisterRoutes sets up all application routes
 func RegisterRoutes(app *fiber.App) {
-	UserRoutes(app)
+	// Create API group
+	api := app.Group("/api")
+	
+	// Register all routes under /api
+	UserRoutes(api)
+	MovieRoutes(api)
 }

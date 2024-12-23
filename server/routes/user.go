@@ -6,8 +6,12 @@ import (
 )
 
 // UserRoutes defines routes related to user operations
-func UserRoutes(app *fiber.App) {
-	userGroup := app.Group("/users")
+func UserRoutes(router fiber.Router) {
+	userGroup := router.Group("/users")
 	userGroup.Get("/", handlers.GetAllUsers)
 	userGroup.Post("/", handlers.CreateUser)
+
+	// Auth routes
+	authGroup := router.Group("/auth")
+	authGroup.Get("/telegram", handlers.HandleTelegramLogin)
 }
