@@ -1,30 +1,32 @@
 ## ⭐ Introduction
- This project is a clone of 'Google Docs', designed to provide a collaborative document editing experience similar to Google Docs. It allows multiple users to create, edit, and collaborate on documents in real-time.
+Cinemate is a modern web application designed to provide users with a comprehensive movie browsing and management experience. It allows users to explore movies, manage their watchlists, and interact with movie-related content.
 
 ## 🟢 Features
 
-- **Document Creation and Storage:** Users can create new documents and store them securely in the database.
-- **Real-time Document Editing:** Multiple users can collaborate and edit the same document simultaneously, with changes reflected instantly for all participants.
-- **Real-time Sync:** Changes made by different users are automatically synchronized across all connected clients, ensuring seamless collaboration.
-- **Rich Text Editing:** The Quill text editor provides a rich editing experience, allowing users to format text, add images, and more.
+- **Movie Exploration:** Browse and search through an extensive collection of movies
+- **User Authentication:** Secure user authentication and authorization system
+- **Personalized Experience:** Create and manage personal watchlists and favorites
+- **Movie Details:** Access detailed information about movies including cast, ratings, and reviews
+- **Responsive Design:** Seamless experience across desktop and mobile devices
 
 ## 🔧 Tech-Stack 
 
 - **Frontend:**
   - React.js
-  - Quill
-  - shadcn/ui
+  - Vite
+  - TypeScript
+  - Modern UI components
 
 - **Backend:**
-  - Node.js
-  - Socket.io
+  - Go (Fiber framework)
+  - RESTful API architecture
 
 - **Database:**
   - MongoDB
 
 - **Other Tools:**
-  - TypeScript
   - Docker
+  - Environment-based configuration
 
 ## ▶️ Getting Started
 
@@ -35,97 +37,68 @@ To get a local copy up and running, please follow these simple steps.
 Here's what you need to be able to run the application locally:
 
 - Node.js (Version: >=18.x)
-- MongoDB
+- Go (Latest version)
 - npm / yarn
+- Docker (optional)
 
 ## 💻 Development
 
-### 🟢 Setup (without Docker) :
+### 🟢 Setup (without Docker):
 
-1. Clone the repo. (or fork https://github.com/KshitijTodkar48/Google-Docs-Clone/fork).
-
+1. Clone the repo
    ```sh
-   git clone https://github.com/KshitijTodkar48/Google-Docs-Clone.git
+   git clone [your-repository-url]
    ```
 
-2. Go to the server directory.
- 
+2. Go to the server directory
    ```sh
    cd server
    ```
 
-3. Install packages with npm/yarn.
-
+3. Install Go dependencies
    ```sh
-   npm install
-   ```
-   or
-   
-   ```sh
-   yarn install
+   go mod download
    ```
 
-   
-4. Set up your `.env` variables.
+4. Set up your environment variables
+   Create a `.env` file in the server directory with necessary configurations
 
-   Create a new file named `.env` in `Google-Docs-Clone/server` directory.
+5. Start the server
+   ```sh
+   go run main.go
+   ```
 
-   In the server `.env` file, add a variable named `DATABASE_URL`.
-   
-   - You will need you own MongoDB database (local or cloud). Put its link under `DATABASE_URL` in the `.env` file.
-
-   Add another variable named `CLIENT_ORIGIN` and set its value to `http://localhost:5173`.
-
-  
-5. Run the following command:
-   
-    ```sh
-    npm run dev
-    ```
-
-  Now the backend server will be running on http://localhost:3000
-
-6. Open a new terminal and go to the client directory.
-
+6. In a new terminal, go to the client directory
    ```sh
    cd client
    ```
 
-7. Install the client dependencies with npm/yarn.
-
+7. Install the client dependencies
    ```sh
    npm install
    ```
 
-8. Set up your `.env` variables.
+8. Set up client environment variables
+   Create a `.env` file in the client directory with necessary configurations
 
-   Create a new file named `.env` in `Google-Docs-Clone/client` directory.
-   
-   In that file, add a variable named `VITE_SERVER_URL` and set its value to `http://localhost:3000`.
-   
-10. Run the following command: 
-    ```sh
-    npm run dev
-    ```
-    
- The React app will be running on http://localhost:5173
+9. Start the client
+   ```sh
+   npm run dev
+   ```
 
+The React app will be running on http://localhost:5173
 
-## 🐋 Setup (with Docker) :
+## 🐋 Setup (with Docker):
 
-1. Set up environment variables:
-   - Follow the steps 4 and 8 in the above 'Setup without docker' guide.
-     
+1. Set up environment variables as described above
 
-2. Run the following command in the root directory: 
-    ```sh
-    docker-compose up
-    ```
+2. Run from the root directory:
+   ```sh
+   docker-compose up
+   ```
 
-Now the application will be running on http://localhost:5173
-
+The application will be available at http://localhost:5173
 
 ## ▶️ Preview
 
-https://github.com/KshitijTodkar48/Google-Docs-Clone/assets/120639775/a7dc1200-3617-4214-b065-339a55eaad59
-
+[Add screenshots or demo video of your application here]
