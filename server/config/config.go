@@ -27,7 +27,7 @@ func SetupAppConfig(app *fiber.App) {
 
 	// Add CORS middleware
 	app.Use(cors.New(cors.Config{
-		AllowOrigins: "http://localhost:5173,https://alsts.github.io",
+		AllowOrigins: "http://localhost:5173,https://alsts.github.io,https://web.telegram.org,https://t.me",
 		AllowHeaders: "Origin, Content-Type, Accept",
 	}))
 
