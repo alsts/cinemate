@@ -5,6 +5,8 @@ function Home() {
   const { data: movies, isLoading, error } = useQuery({
     queryKey: ['movies'],
     queryFn: getMovies,
+    retry: true,
+    retryDelay: 10000, // 10 seconds
   })
 
   if (isLoading) return <div>Loading...</div>
