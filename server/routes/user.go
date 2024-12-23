@@ -5,13 +5,9 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
-// UserRoutes defines routes related to user operations
-func UserRoutes(router fiber.Router) {
+// SetupUserRoutes defines routes related to user operations
+func SetupUserRoutes(router fiber.Router) {
 	userGroup := router.Group("/users")
 	userGroup.Get("/", handlers.GetAllUsers)
 	userGroup.Post("/", handlers.CreateUser)
-
-	// Auth routes
-	authGroup := router.Group("/auth")
-	authGroup.Get("/telegram", handlers.HandleTelegramLogin)
 }

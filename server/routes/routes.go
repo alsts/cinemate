@@ -8,8 +8,9 @@ import (
 func RegisterRoutes(app *fiber.App) {
 	// Create API group
 	api := app.Group("/api")
-	
+
 	// Register all routes under /api
-	UserRoutes(api)
-	MovieRoutes(api)
+	SetupUserRoutes(api)
+	SetupMovieRoutes(api)
+	SetupAuthRoutes(api)
 }
