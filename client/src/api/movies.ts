@@ -1,7 +1,9 @@
 import axios from 'axios'
 
 const api = axios.create({
-  baseURL: '/api',
+  baseURL: process.env.NODE_ENV === 'production'
+  ? 'https://cinemate-backend-iz6i.onrender.com/api`'
+  : 'http://localhost:3000/api',
 })
 
 export interface Movie {

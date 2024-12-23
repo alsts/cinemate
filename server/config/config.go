@@ -4,6 +4,7 @@ import (
 	"os"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 // Config holds all configuration for our application
@@ -23,6 +24,12 @@ func LoadConfig() *Config {
 // SetupAppConfig configures the Fiber application
 func SetupAppConfig(app *fiber.App) {
 	config := LoadConfig()
+
+	// Add CORS middleware
+	app.Use(cors.New(cors.Config{
+		AllowOrigins: "http://localhost:5173,https://alsts.github.io",
+		AllowHeaders: "Origin, Content-Type, Accept",
+	}))
 
 	// Add middleware to inject config into context
 	app.Use(func(c *fiber.Ctx) error {

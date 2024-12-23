@@ -6,7 +6,7 @@
   "homepage": "https://alsts.github.io/cinemate",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "NODE_ENV=production tsc && NODE_ENV=production vite build",
     "preview": "vite preview",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
