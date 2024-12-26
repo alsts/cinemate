@@ -21,7 +21,7 @@ export default function InteractiveMovieCard({
   totalReviews = 831,
   genres = ["Action", "Mystery", "Thriller"],
   votes = 0,
-  imageUrl = "https://placehold.co/400x600/1a1a1a/ffffff?text=Movie",
+  imageUrl = "/placeholder.svg?height=600&width=400",
   onSwipe,
 }: MovieCardProps) {
   const [exitX, setExitX] = useState<number | null>(null)
@@ -29,6 +29,29 @@ export default function InteractiveMovieCard({
   // Motion values for drag gesture
   const x = useMotionValue(0)
   const y = useMotionValue(0)
+
+  // Background gradient transforms
+  const likeGradient = useTransform(
+    x,
+    [-300, 150, 300],
+    [
+      'linear-gradient(to right, transparent, transparent)',
+      'linear-gradient(to right, transparent, transparent)',
+      'linear-gradient(to right, rgba(34, 197, 94, 0), rgba(34, 197, 94, 0.1))'
+    ],
+    { clamp: false }
+  )
+  const dislikeGradient = useTransform(
+    x,
+    [-300, -150, 300],
+    [
+      'linear-gradient(to left, transparent, rgba(239, 68, 68, 0.1))',
+      'linear-gradient(to left, transparent, transparent)',
+      'linear-gradient(to left, transparent, transparent)'
+    ],
+    { clamp: false }
+  )
+
   const rotate = useTransform(
     [x, y],
     (latest: number[]) => latest[0] * 0.05 + latest[1] * 0.05
@@ -73,7 +96,7 @@ export default function InteractiveMovieCard({
   const likeOpacity = useTransform(x, [0, 150], [0, 1])
   const dislikeOpacity = useTransform(x, [-150, 0], [1, 0])
 
-  const handleDragEnd = (event: any, info: any) => {
+  const handleDragEnd = (_: any, info: any) => {
     const threshold = 150 // Increased threshold for more intentional swipes
     const velocity = Math.abs(info.velocity.x)
     const direction = info.velocity.x < 0 ? -1 : 1
@@ -118,6 +141,21 @@ export default function InteractiveMovieCard({
 
   return (
     <div className="min-h-screen bg-black p-4 grid justify-items-center align-items-center touch-none overflow-hidden">
+      {/* Background gradients */}
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3 }}
+        className="absolute inset-0 pointer-events-none z-0"
+        style={{ background: likeGradient }}
+      />
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3 }}
+        className="absolute inset-0 pointer-events-none z-0"
+        style={{ background: dislikeGradient }}
+      />
       {/* Votes counter at the very top */}
       <div className="absolute top-4 z-10">
         <div className="bg-[#9333EA] text-white px-6 py-1 rounded-full text-sm font-medium">
@@ -168,6 +206,7 @@ export default function InteractiveMovieCard({
           whileTap={{ cursor: "grabbing" }}
           variants={cardVariants}
           initial="initial"
+          // @ts-ignore
           animate="animate"
           onAnimationComplete={() => setAnimationComplete(true)}
           className="relative mx-auto w-[300px] cursor-grab active:cursor-grabbing"
