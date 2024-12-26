@@ -12,6 +12,7 @@ interface MovieCardProps {
   genres: string[]
   votes: number
   imageUrl: string
+  onSwipe: (liked: boolean) => void
 }
 
 export default function InteractiveMovieCard({
@@ -21,6 +22,7 @@ export default function InteractiveMovieCard({
   genres = ["Action", "Mystery", "Thriller"],
   votes = 0,
   imageUrl = "/placeholder.svg?height=600&width=400",
+  onSwipe,
 }: MovieCardProps) {
   const [exitX, setExitX] = useState<number | null>(null)
 
@@ -40,7 +42,7 @@ export default function InteractiveMovieCard({
   const rotateX = useTransform(y, [-300, 300], [10, -10])
   const rotateY = useTransform(x, [-300, 300], [-10, 10])
   const scale = useTransform([x, y], (latest: number[]) => {
-    const distance = Math.sqrt(latest[0] ** 2 + latest[1]** 2)
+    const distance = Math.sqrt(latest[0] ** 2 + latest[1] * 2)
     return 1 - Math.min(distance * 0.0005, 0.1)
   })
 
@@ -51,16 +53,38 @@ export default function InteractiveMovieCard({
   const likeOpacity = useTransform(x, [0, 150], [0, 1])
   const dislikeOpacity = useTransform(x, [-150, 0], [1, 0])
 
-  const handleDragEnd = async (_: any, info: any) => {
-    const offsetX = info.offset.x
-    const velocity = info.velocity.x
+  const handleDragEnd = (event: any, info: any) => {
+    const threshold = 150 // Increased threshold for more intentional swipes
+    const velocity = Math.abs(info.velocity.x)
+    const direction = info.velocity.x < 0 ? -1 : 1
+    const isSwipe = velocity >= 400 || Math.abs(info.offset.x) >= threshold
 
-    if (Math.abs(offsetX) > 100 || Math.abs(velocity) > 500) {
-      const direction = offsetX > 0 ? 1 : -1
-      await controls.start({ x: direction * 500, opacity: 0 })
-      setExitX(direction)
+    if (isSwipe) {
+      const liked = direction > 0
+      const exitDistance = direction * (window.innerWidth + 200) // Add extra distance for smoother exit
+      controls.start({
+        x: exitDistance,
+        opacity: 0,
+        transition: {
+          duration: 0.8,
+          ease: [0.32, 0.72, 0.35, 1.0], // Custom ease curve for smooth exit
+        }
+      }).then(() => {
+        setExitX(exitDistance)
+        onSwipe(liked)
+      })
     } else {
-      controls.start({ x: 0, y: 0, transition: { type: 'spring' } })
+      // Spring back to center with gentler bounce
+      controls.start({
+        x: 0,
+        y: 0,
+        transition: {
+          type: "spring",
+          stiffness: 200,
+          damping: 20,
+          duration: 0.6
+        }
+      })
     }
   }
 
@@ -73,7 +97,7 @@ export default function InteractiveMovieCard({
   }
 
   return (
-    <div className="min-h-screen bg-black p-4 grid place-items-center touch-none overflow-hidden">
+    <div className="min-h-screen bg-black p-4 grid justify-items-center align-items-center touch-none overflow-hidden">
       {/* Votes counter at the very top */}
       <div className="absolute top-4 z-10">
         <div className="bg-[#9333EA] text-white px-6 py-1 rounded-full text-sm font-medium">
@@ -81,7 +105,7 @@ export default function InteractiveMovieCard({
         </div>
       </div>
 
-      <div className="relative w-full max-w-[340px] h-[480px] perspective-1000">
+      <div className="relative w-full max-w-[340px] h-[480px] perspective-1000 pt-20">
         {/* Like/Dislike icons on the sides of the screen */}
         <motion.div
           className="absolute left-0 top-1/2 -translate-y-1/2 w-16 h-16 flex items-center justify-center"
@@ -103,30 +127,37 @@ export default function InteractiveMovieCard({
 
         {/* Interactive Movie Card */}
         <motion.div
-          className="w-full absolute -translate-x-1/2 touch-none"
           drag
           dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
-          dragElastic={0.7}
+          dragElastic={0.7} // Made more elastic for smoother drag
           onDragEnd={handleDragEnd}
+          animate={controls}
           style={{
             x,
             y,
-            rotate,
-            opacity,
             rotateX,
             rotateY,
+            rotate,
             scale,
+            opacity,
           }}
-          animate={controls}
           whileTap={{ cursor: "grabbing" }}
+          className="absolute inset-0 w-full h-full cursor-grab active:cursor-grabbing"
+          transition={{
+            type: "spring",
+            stiffness: 300,
+            damping: 25,
+            restDelta: 0.5
+          }}
         >
           <div className="bg-[grey] rounded-2xl overflow-hidden shadow-[0_10px_20px_rgba(0,0,0,0.2)] transition-shadow duration-300 hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)]">
             {/* Movie poster */}
-            <div className="relative rounded-2xl overflow-hidden">
+            <div className="relative overflow-hidden">
               <img
                 src={imageUrl}
                 alt={title}
-                className="w-full aspect-[3/4] object-cover"
+                draggable="false"
+                className="w-full aspect-[3/4] object-cover select-none pointer-events-none"
               />
 
               {/* Netflix badge */}
