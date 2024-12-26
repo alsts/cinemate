@@ -13,9 +13,7 @@ function Home() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [likedMovies, setLikedMovies] = useState<Record<string, boolean>>({});
 
-  // const handleVote = () => {
-  //   WebApp.HapticFeedback.impactOccurred('medium');
-  // };
+  
 
   // const handleInviteFriends = () => {
   //   WebApp.HapticFeedback.impactOccurred('medium');

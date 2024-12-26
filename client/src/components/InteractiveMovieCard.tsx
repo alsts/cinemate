@@ -1,9 +1,10 @@
 'use client'
 
 import { motion, useAnimation, useMotionValue, useTransform } from 'framer-motion'
-import { ThumbsUp, ThumbsDown } from 'lucide-react'
+import { ThumbsDown, ThumbsUp } from 'lucide-react'
 import { useState } from 'react'
 import { MovieActionBar } from './MovieActionBar'
+import WebApp from '@twa-dev/sdk'
 
 interface MovieCardProps {
   title: string
@@ -114,6 +115,7 @@ export default function InteractiveMovieCard({
       }).then(() => {
         setExitX(exitDistance)
         onSwipe(liked)
+        WebApp.HapticFeedback.impactOccurred('heavy');
       })
     } else {
       // Spring back to center with gentler bounce
@@ -124,7 +126,7 @@ export default function InteractiveMovieCard({
           type: "spring",
           stiffness: 200,
           damping: 20,
-          duration: 0.6
+          duration: 2
         }
       })
     }
@@ -141,14 +143,14 @@ export default function InteractiveMovieCard({
   return (
     <div className="min-h-screen bg-black p-4 grid justify-items-center align-items-center touch-none overflow-hidden">
       {/* Background gradients */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.3 }}
         className="absolute inset-0 pointer-events-none z-0"
         style={{ background: likeGradient }}
       />
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.3 }}
