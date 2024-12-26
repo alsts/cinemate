@@ -1,9 +1,9 @@
 'use client'
 
 import { motion, useAnimation, useMotionValue, useTransform } from 'framer-motion'
-import { Heart, Info, Play, X } from 'lucide-react'
+import { Heart, X } from 'lucide-react'
 import { useState } from 'react'
-import { Button } from './ui/button'
+import { MovieActionBar } from './MovieActionBar'
 
 interface MovieCardProps {
   title: string
@@ -21,7 +21,7 @@ export default function InteractiveMovieCard({
   totalReviews = 831,
   genres = ["Action", "Mystery", "Thriller"],
   votes = 0,
-  imageUrl = "/placeholder.svg?height=600&width=400",
+  imageUrl = "https://placehold.co/400x600/1a1a1a/ffffff?text=Movie",
   onSwipe,
 }: MovieCardProps) {
   const [exitX, setExitX] = useState<number | null>(null)
@@ -48,6 +48,26 @@ export default function InteractiveMovieCard({
 
   // Controls for the card exit animation
   const controls = useAnimation()
+  const entryX = 300  // Reduced distance from center
+  const [animationComplete, setAnimationComplete] = useState(false)
+
+  // Card container variants for entry animation
+  const cardVariants = {
+    initial: {
+      x: entryX,
+      opacity: 0
+    },
+    animate: {
+      x: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 100,  // Increased stiffness for faster animation
+        damping: 15,     // Adjusted damping for quicker settling
+        duration: 0.5    // Added duration limit
+      }
+    }
+  }
 
   // Transform values for like/dislike icons
   const likeOpacity = useTransform(x, [0, 150], [0, 1])
@@ -105,25 +125,29 @@ export default function InteractiveMovieCard({
         </div>
       </div>
 
-      <div className="relative w-full max-w-[340px] h-[480px] perspective-1000 pt-20">
+      <div className="relative w-full max-w-[340px] h-[480px] perspective-1000">
         {/* Like/Dislike icons on the sides of the screen */}
-        <motion.div
-          className="absolute left-0 top-1/2 -translate-y-1/2 w-16 h-16 flex items-center justify-center"
-          style={{ opacity: dislikeOpacity, x: -60 }}
-        >
-          <div className="w-16 h-16 rounded-full bg-[#2D2B45]/80 backdrop-blur-md flex items-center justify-center">
-            <X className="h-8 w-8 text-[#EC4899]" />
-          </div>
-        </motion.div>
+        {animationComplete && (
+          <>
+            <motion.div
+              className="absolute left-0 top-1/2 -translate-y-1/2 w-16 h-16 flex items-center justify-center"
+              style={{ opacity: dislikeOpacity, x: -60 }}
+            >
+              <div className="w-16 h-16 rounded-full bg-[#2D2B45]/80 backdrop-blur-md flex items-center justify-center">
+                <X className="h-8 w-8 text-[#EC4899]" />
+              </div>
+            </motion.div>
 
-        <motion.div
-          className="absolute right-0 top-1/2 -translate-y-1/2 w-16 h-16 flex items-center justify-center"
-          style={{ opacity: likeOpacity, x: 60 }}
-        >
-          <div className="w-16 h-16 rounded-full bg-[#2D2B45]/80 backdrop-blur-md flex items-center justify-center">
-            <Heart className="h-8 w-8 text-[#3B82F6]" />
-          </div>
-        </motion.div>
+            <motion.div
+              className="absolute right-0 top-1/2 -translate-y-1/2 w-16 h-16 flex items-center justify-center"
+              style={{ opacity: likeOpacity, x: 60 }}
+            >
+              <div className="w-16 h-16 rounded-full bg-[#2D2B45]/80 backdrop-blur-md flex items-center justify-center">
+                <Heart className="h-8 w-8 text-[#3B82F6]" />
+              </div>
+            </motion.div>
+          </>
+        )}
 
         {/* Interactive Movie Card */}
         <motion.div
@@ -142,7 +166,11 @@ export default function InteractiveMovieCard({
             opacity,
           }}
           whileTap={{ cursor: "grabbing" }}
-          className="absolute inset-0 w-full h-full cursor-grab active:cursor-grabbing"
+          variants={cardVariants}
+          initial="initial"
+          animate="animate"
+          onAnimationComplete={() => setAnimationComplete(true)}
+          className="relative mx-auto w-[300px] cursor-grab active:cursor-grabbing"
           transition={{
             type: "spring",
             stiffness: 300,
@@ -203,24 +231,7 @@ export default function InteractiveMovieCard({
       </div>
 
       {/* Action buttons */}
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-[#1C1B33]">
-        <div className="flex justify-center max-w-[280px] mx-auto">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="w-12 h-12 rounded-full bg-[#2D2B45] text-[#9333EA] hover:bg-[#2D2B45]/80 mx-2"
-          >
-            <Play className="h-6 w-6" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="w-12 h-12 rounded-full bg-[#2D2B45] text-[#10B981] hover:bg-[#2D2B45]/80 mx-2"
-          >
-            <Info className="h-6 w-6" />
-          </Button>
-        </div>
-      </div>
+      <MovieActionBar />
     </div>
   )
 }
