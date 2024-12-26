@@ -1,7 +1,7 @@
 'use client'
 
 import { motion, useAnimation, useMotionValue, useTransform } from 'framer-motion'
-import { Heart, X } from 'lucide-react'
+import { ThumbsUp, ThumbsDown } from 'lucide-react'
 import { useState } from 'react'
 import { MovieActionBar } from './MovieActionBar'
 
@@ -33,19 +33,19 @@ export default function InteractiveMovieCard({
   // Background gradient transforms
   const likeGradient = useTransform(
     x,
-    [-300, 150, 300],
+    [-200, 150, 300],
     [
       'linear-gradient(to right, transparent, transparent)',
       'linear-gradient(to right, transparent, transparent)',
-      'linear-gradient(to right, rgba(34, 197, 94, 0), rgba(34, 197, 94, 0.1))'
+      'linear-gradient(to right, rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.15))'
     ],
     { clamp: false }
   )
   const dislikeGradient = useTransform(
     x,
-    [-300, -150, 300],
+    [-180, -150, 300],
     [
-      'linear-gradient(to left, transparent, rgba(239, 68, 68, 0.1))',
+      'linear-gradient(to left, transparent, rgba(236, 72, 153, 0.12))',
       'linear-gradient(to left, transparent, transparent)',
       'linear-gradient(to left, transparent, transparent)'
     ],
@@ -71,23 +71,22 @@ export default function InteractiveMovieCard({
 
   // Controls for the card exit animation
   const controls = useAnimation()
-  const entryX = 300  // Reduced distance from center
   const [animationComplete, setAnimationComplete] = useState(false)
 
   // Card container variants for entry animation
   const cardVariants = {
     initial: {
-      x: entryX,
+      scale: 0.8,
       opacity: 0
     },
     animate: {
-      x: 0,
+      scale: 1,
       opacity: 1,
       transition: {
         type: "spring",
-        stiffness: 100,  // Increased stiffness for faster animation
-        damping: 15,     // Adjusted damping for quicker settling
-        duration: 0.5    // Added duration limit
+        stiffness: 400,
+        damping: 25,
+        duration: 0.3
       }
     }
   }
@@ -163,7 +162,7 @@ export default function InteractiveMovieCard({
         </div>
       </div>
 
-      <div className="relative w-full max-w-[340px] h-[480px] perspective-1000">
+      <div className="relative w-full max-w-[340px] h-[480px] perspective-1000 mt-20">
         {/* Like/Dislike icons on the sides of the screen */}
         {animationComplete && (
           <>
@@ -172,7 +171,7 @@ export default function InteractiveMovieCard({
               style={{ opacity: dislikeOpacity, x: -60 }}
             >
               <div className="w-16 h-16 rounded-full bg-[#2D2B45]/80 backdrop-blur-md flex items-center justify-center">
-                <X className="h-8 w-8 text-[#EC4899]" />
+                <ThumbsDown className="h-8 w-8 text-[#EC4899]" />
               </div>
             </motion.div>
 
@@ -181,7 +180,7 @@ export default function InteractiveMovieCard({
               style={{ opacity: likeOpacity, x: 60 }}
             >
               <div className="w-16 h-16 rounded-full bg-[#2D2B45]/80 backdrop-blur-md flex items-center justify-center">
-                <Heart className="h-8 w-8 text-[#3B82F6]" />
+                <ThumbsUp className="h-8 w-8 text-[#3B82F6]" />
               </div>
             </motion.div>
           </>

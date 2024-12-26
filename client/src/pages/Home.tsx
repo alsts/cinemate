@@ -34,7 +34,7 @@ function Home() {
   const currentMovie = movies[currentIndex];
 
   return (
-    <div className="min-h-screen bg-[#1C1B33] mt-20">
+    <div className="min-h-screen bg-[#1C1B33]">
       {currentMovie && (
         <InteractiveMovieCard
           key={currentMovie.id} 
