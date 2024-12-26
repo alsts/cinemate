@@ -9,7 +9,11 @@ const api = axios.create({
 export interface Movie {
   id: number
   title: string
-  // Add more movie properties based on your Go backend
+  rating: number
+  totalReviews: number
+  genres: string[]
+  votes: number
+  imageUrl: string
 }
 
 export const getMovies = async (): Promise<Movie[]> => {
