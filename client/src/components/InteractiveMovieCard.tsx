@@ -1,10 +1,10 @@
 'use client'
 
+import WebApp from '@twa-dev/sdk'
 import { motion, useAnimation, useMotionValue, useTransform } from 'framer-motion'
 import { ThumbsDown, ThumbsUp } from 'lucide-react'
 import { useState } from 'react'
 import { MovieActionBar } from './MovieActionBar'
-import WebApp from '@twa-dev/sdk'
 
 interface MovieCardProps {
   title: string
@@ -21,7 +21,6 @@ export default function InteractiveMovieCard({
   rating = 4.5,
   totalReviews = 831,
   genres = ["Action", "Mystery", "Thriller"],
-  votes = 0,
   imageUrl = "/placeholder.svg?height=600&width=400",
   onSwipe,
 }: MovieCardProps) {
@@ -34,19 +33,19 @@ export default function InteractiveMovieCard({
   // Background gradient transforms
   const likeGradient = useTransform(
     x,
-    [-200, 150, 300],
+    [-200, 50, 200],
     [
       'linear-gradient(to right, transparent, transparent)',
       'linear-gradient(to right, transparent, transparent)',
-      'linear-gradient(to right, rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.15))'
+      'linear-gradient(to right, rgba(59, 130, 246, 0), rgba(59, 130, 246, 0.3))'
     ],
     { clamp: false }
   )
   const dislikeGradient = useTransform(
     x,
-    [-180, -150, 300],
+    [-100, -50, 100],
     [
-      'linear-gradient(to left, transparent, rgba(236, 72, 153, 0.12))',
+      'linear-gradient(to left, transparent, rgba(236, 72, 153, 0.3))',
       'linear-gradient(to left, transparent, transparent)',
       'linear-gradient(to left, transparent, transparent)'
     ],
@@ -141,7 +140,7 @@ export default function InteractiveMovieCard({
   }
 
   return (
-    <div className="min-h-screen bg-black p-4 grid justify-items-center align-items-center touch-none overflow-hidden">
+    <div className="min-h-screen bg-black grid justify-items-center align-items-center touch-none overflow-hidden">
       {/* Background gradients */}
       <motion.div
         initial={{ opacity: 0 }}
@@ -158,31 +157,31 @@ export default function InteractiveMovieCard({
         style={{ background: dislikeGradient }}
       />
       {/* Votes counter at the very top */}
-      <div className="absolute top-4 z-10">
+      {/* <div className="absolute top-4 z-10">
         <div className="bg-[#9333EA] text-white px-6 py-1 rounded-full text-sm font-medium">
           {votes} votes
         </div>
-      </div>
+      </div> */}
 
-      <div className="relative w-full max-w-[340px] h-[480px] perspective-1000 mt-20">
+      <div className="relative w-full max-w-[340px] h-[480px] perspective-1000 mt-10 mb-20">
         {/* Like/Dislike icons on the sides of the screen */}
         {animationComplete && (
           <>
             <motion.div
-              className="absolute left-0 top-1/2 -translate-y-1/2 w-16 h-16 flex items-center justify-center"
-              style={{ opacity: dislikeOpacity, x: -60 }}
+              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 flex items-center justify-center"
+              style={{ opacity: dislikeOpacity }}
             >
-              <div className="w-16 h-16 rounded-full bg-[#2D2B45]/80 backdrop-blur-md flex items-center justify-center">
-                <ThumbsDown className="h-8 w-8 text-[#EC4899]" />
+              <div className="w-32 h-32 rounded-full bg-[#2D2B45]/80 backdrop-blur-md flex items-center justify-center">
+                <ThumbsDown className="h-16 w-16 text-[#EC4899]" />
               </div>
             </motion.div>
 
             <motion.div
-              className="absolute right-0 top-1/2 -translate-y-1/2 w-16 h-16 flex items-center justify-center"
-              style={{ opacity: likeOpacity, x: 60 }}
+              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 flex items-center justify-center"
+              style={{ opacity: likeOpacity}}
             >
-              <div className="w-16 h-16 rounded-full bg-[#2D2B45]/80 backdrop-blur-md flex items-center justify-center">
-                <ThumbsUp className="h-8 w-8 text-[#3B82F6]" />
+              <div className="w-32 h-32 rounded-full bg-[#2D2B45]/80 backdrop-blur-md flex items-center justify-center">
+                <ThumbsUp className="h-16 w-16 text-[#3B82F6]" />
               </div>
             </motion.div>
           </>
@@ -210,7 +209,7 @@ export default function InteractiveMovieCard({
           // @ts-ignore
           animate="animate"
           onAnimationComplete={() => setAnimationComplete(true)}
-          className="relative mx-auto w-[300px] cursor-grab active:cursor-grabbing"
+          className="relative mx-auto cursor-grab active:cursor-grabbing"
           transition={{
             type: "spring",
             stiffness: 300,

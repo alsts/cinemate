@@ -16,10 +16,12 @@ Cinemate is a modern web application designed to provide users with a comprehens
   - Vite
   - TypeScript
   - Modern UI components
+  - Telegram WebApp SDK
 
 - **Backend:**
   - Go (Fiber framework)
   - RESTful API architecture
+  - Telegram Bot API
 
 - **Database:**
   - MongoDB
@@ -40,8 +42,39 @@ Here's what you need to be able to run the application locally:
 - Go (Latest version)
 - npm / yarn
 - Docker (optional)
+- Telegram Bot Token (Get it from [@BotFather](https://t.me/botfather))
 
-## 💻 Development
+### 🔐 Telegram Bot Setup
+
+1. Create a new bot with [@BotFather](https://t.me/botfather)
+2. Get your bot token
+3. Enable the Web App feature for your bot:
+   ```
+   /mybots > Select your bot > Bot Settings > Web App Settings
+   ```
+4. Set your web app URL (in development, use ngrok or similar for HTTPS)
+
+### 🟢 Environment Setup
+
+1. Server Configuration (.env):
+   ```env
+   # Required
+   TELEGRAM_BOT_TOKEN=your_bot_token_here
+   ALLOWED_ORIGINS=http://localhost:5173
+
+   # Database (if using)
+   DB_HOST=localhost
+   DB_USER=postgres
+   DB_PASSWORD=your-password
+   DB_NAME=cinemate
+   DB_PORT=5432
+   ```
+
+2. Client Configuration (.env):
+   ```env
+   REACT_APP_API_BASE_URL=http://localhost:3001
+   REACT_APP_TELEGRAM_BOT_USERNAME=your_bot_username
+   ```
 
 ### 🟢 Setup (without Docker):
 

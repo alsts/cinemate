@@ -13,13 +13,6 @@ function Home() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [likedMovies, setLikedMovies] = useState<Record<string, boolean>>({});
 
-  
-
-  // const handleInviteFriends = () => {
-  //   WebApp.HapticFeedback.impactOccurred('medium');
-  //   WebApp.openTelegramLink('https://t.me/share/url?url=https://t.me/CinamateBot/cinemate&text=Check out Cinemate - Your Movie Companion!');
-  // };
-
   if (isLoading) return <div>Loading...</div>
   if (error) return <div>Error: {error.message}</div>
   if (!movies || movies.length === 0) return <div>No movies found</div>
